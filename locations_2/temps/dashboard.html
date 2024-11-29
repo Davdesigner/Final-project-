@@ -1,0 +1,278 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard|Admin</title>
+  <link rel="stylesheet" href="{% static 'assets/dashboard/style.css'%} " />
+  <!-- Font Awesome Cdn Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <ul>
+        <li><a href="#" class="logo">
+          <img src="{{ user.profile.profile_image.url }}">
+          <span class="nav-item">{{ user.username }}</span>
+        </a></li>
+        <li><a href="#">
+          <i class="fas fa-menorah"></i>
+          <span class="nav-item">Dashboard</span>
+        </a></li>
+        <li><a href="#">
+          <i class="fas fa-database"></i>
+          <span class="nav-item">Report</span>
+        </a></li>
+        <li><a href="{% url 'map' %}">
+          <i class="fas fa-map"></i>
+          <span class="nav-item">Map</span>
+        </a></li>
+        <li><a href="#message">
+          <i class="fas fa-comment"></i>
+          <span class="nav-item">Message</span>
+        </a></li>
+        
+        <li><a href="{% url 'profile' %}">
+          <i class="fas fa-user"></i>
+          <span class="nav-item">Account</span>
+        </a></li>
+
+        <li><a href="{% url 'logout' %}" class="logout">
+          <i class="fas fa-sign-out-alt"></i>
+          <span class="nav-item">Log out</span>
+        </a></li>
+      </ul>
+    </nav>
+
+
+    <section class="main">
+      <div class="main-top">
+        <h1>Staff Dashboard</h1>
+        <i class="fas fa-user-cog"></i>
+      </div>
+      <div class="users">
+        <div class="card">
+          <img src="{% static 'assets/img/icons/user.png' %}">
+          <h4>System User</h4>
+          <div class="per">
+            <table>
+              <tr>
+                <td><span>{{number_user}}</span></td>
+              </tr>
+              <tr>
+                <td>User</td>
+              </tr>
+            </table>
+          </div>
+          
+        </div>
+        <div class="card">
+          <img src="{% static 'assets/img/icons/presentation.png' %}">
+          <h4>All Reported Issues</h4>
+          <div class="per">
+            <table>
+              <tr>
+                <td><span>{{ number_problem }}</span></td>
+              </tr>
+              <tr>
+                <td>Property</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <img src="{% static 'assets/img/icons/checked.png' %}">
+          <h4>Fixed Issues</h4>
+          <div class="per">
+            <table>
+              <tr>
+                <td><span>{{ number_complete }}</span></td>
+              </tr>
+              <tr>
+                <td>Property</td>
+              </tr>
+            </table>
+          </div>
+          
+        </div>
+        <div class="card">
+          <img src="{% static 'assets/img/icons/cancel.png' %}">
+          <h4>Unattended Issues</h4>
+          <div class="per">
+            <table>
+              <tr>
+                <td><span>{{ number_incomplete }}</span></td>
+              </tr>
+              <tr>
+                <td>Property</td>
+              </tr>
+            </table>
+          </div>
+          
+        </div>
+      </div>
+      <!-- list of user -->
+      <section class="attendance">
+        <div class="attendance-list">
+          <h1>List Of User</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>UserName</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>FirstName</th>
+                <th>Lastname</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for user in users %}
+              <tr>
+                <td>US-AX-{{user.id}}</td>
+                <td>{{user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.phone_number }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+              </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+
+      <!-- list of problems-->
+
+      <section class="attendance">
+        <div class="attendance-list">
+          <h1>List Of Reported Issues</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Reported Time</th>
+                <th>Address</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for data in datas %}
+              <tr>
+                <td>RP-{{data.id}}</td>
+                <td>{{data.poster}}</td>
+                <td nowrap="nowrap"><a href="{% url 'datail' data.id %}" style="text-decoration: none;">{{data.title}}</a></td>
+                <td>{{data.reported_time}}</td>
+                <td>{{data.district}},{{data.sector}}</td>
+              </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!--  list of Pending Inquiries -->
+
+      <section class="attendance">
+        <div class="attendance-list">
+          <h1>Pending Inquiries</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Reported Time</th>
+                <th>Address</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for incomplete in incompletes %}
+              <tr>
+                <td>RP-{{incomplete.id}}</td>
+                <td>{{incomplete.poster}}</td>
+                <td nowrap="nowrap"><a href="{% url 'datail' incomplete.id %}" style="text-decoration: none;">{{incomplete.title}}</a></td>
+                <td>{{incomplete.reported_time}}</td>
+                <td>{{incomplete.district}},{{incomplete.sector}}</td>
+                <td><button><a href="{% url 'complete' incomplete.id %}" style="width:50px;text-decoration: none;">incomplete</a></button></td>
+              </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!--  list of fixed issues -->
+
+      <section class="attendance">
+        <div class="attendance-list">
+          <h1>Summary Of Fixed Issues</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Address</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for complete in completes %}
+              <tr>
+                <td>RP-{{complete.id}}</td>
+                <td>{{complete.poster}}</td>
+                <td nowrap="nowrap"><a href="{% url 'datail' complete.id %}" style="text-decoration: none;">{{complete.title}}</a></td>
+                <td>{{complete.district}},{{complete.sector}}</td>
+                <td><button>complete</button></td>
+              </tr>
+              {% endfor %}
+              
+            </tbody>
+          </table>
+        </div>
+      </section>
+      
+      
+      <!--  list of messages -->
+
+
+      <section id="message" class="attendance">
+        <div class="attendance-list">
+          <h1>List of messages</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for message in messages %}
+              <tr>
+                <td>Ms-{{message.id}}</td>
+                <td>{{message.name}}</td>
+                <td nowrap="nowrap">{{message.email}}</td>
+                <td>{{message.subject}}</td>
+                <td><p>{{message.message}}</p></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+  </div>
+
+</body>
+</html>
